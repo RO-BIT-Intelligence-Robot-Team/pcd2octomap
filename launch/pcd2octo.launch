@@ -1,6 +1,6 @@
 <launch>
-    
-    <arg name="pcd_file" default="/home/derek/database_repo/desk.pcd" />
+    <!-- /home/robit/Desktop/robit_stair_filtered.pcd -->
+    <arg name="pcd_file" default="/home/robit/catkin_ws/src/kubo_navigation/data/maps/robit_filter.pcd" />
 
     <node pkg="pcl_ros" type="pcd_to_pointcloud" name="spawn_pcd_to_pcl" output="screen" args ="$(arg pcd_file)  0.1" >
         <param name="frame_id" value="/map" />
