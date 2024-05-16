@@ -3,6 +3,7 @@ project(cvt_pcd2octomap)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
+add_compile_options(-std=c++14)
 SET(CMAKE_BUILD_TYPE Release)
 
 # set exe output dir
