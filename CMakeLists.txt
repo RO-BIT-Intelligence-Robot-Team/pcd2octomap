@@ -12,7 +12,11 @@ SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  pcl_ros
+  sensor_msgs
+)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -118,7 +122,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-# ${catkin_INCLUDE_DIRS}
+    ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -207,3 +211,6 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/app)
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(filter_z src/filter_z.cpp)
+target_link_libraries(filter_z ${catkin_LIBRARIES})

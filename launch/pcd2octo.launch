@@ -1,14 +1,32 @@
 <launch>
     <!-- /home/robit/Desktop/robit_stair_filtered.pcd -->
-    <arg name="pcd_file" default="/home/robit/catkin_ws/src/kubo_navigation/data/maps/robit_filter.pcd" />
+    <arg name="pcd_file" default="/home/sh/catkin_ws/pcd/lab.pcd" />
+    <arg name="rviz" default="true" />
+    <arg name="filter_limit_min" default="0.2" />
+    <arg name="filter_limit_max" default="1.5" />
 
-    <node pkg="pcl_ros" type="pcd_to_pointcloud" name="spawn_pcd_to_pcl" output="screen" args ="$(arg pcd_file)  0.1" >
-        <param name="frame_id" value="/map" />
+    <node pkg="pcl_ros" type="pcd_to_pointcloud" name="spawn_pcd_to_pcl" output="screen" args="$(arg pcd_file) 0.1">
+        <param name="frame_id" value="map" />
         <param name="resolution" value="0.05" />
         <remap from="cloud_pcd" to="cloud_in" />
     </node>
+
+    <node pkg="cvt_pcd2octomap" type="filter_z" name="filter_z" output="screen">
+        <param name="filter_limit_min" value="$(arg filter_limit_min)" />
+        <param name="filter_limit_max" value="$(arg filter_limit_max)" />
+    </node>
     
-    <node pkg="octomap_server" type="octomap_tracking_server_node" name="octomap_tracking_server_node" output="screen" />
-    
-    <!-- rosrun octomap_server octomap_saver -f ~/mapfile.ot -->
+    <node pkg="octomap_server" type="octomap_tracking_server_node" name="octomap_tracking_server_node" output="screen">
+        <remap from="cloud_in" to="/filtered_cloud" />
+        <remap from="projected_map" to="map" />
+    </node>
+
+    <node pkg="map_server" type="map_saver" name="map_saver" args="-f /home/sh/catkin_ws/maps/filtered_map" output="screen"/>
+
+    <group if="$(arg rviz)">
+        <node pkg="rviz" type="rviz" name="cvt_pcd_rviz" args="-d $(find cvt_pcd2octomap)/rviz/pcd2octo.rviz" />
+    </group>
+
+    <!-- rosrun map_server map_saver -f ~/mapfile -->
 </launch>
+

@@ -40,26 +40,26 @@ int main( int argc, char** argv )
 
     cout<<"point cloud loaded, piont size = "<<cloud.points.size()<<endl;
 
-    //声明octomap变量
+    // octomap 변수 선언
     cout<<"copy data into octomap..."<<endl;
-    // 创建带颜色的八叉树对象，参数为分辨率，这里设成了0.05
+    // 해상도를 매개변수로 사용하여 컬러 옥토맵 객체를 만듭니다. 여기서는 0.05로 설정했습니다.
     octomap::ColorOcTree tree( 0.05 );
 
     for (auto p:cloud.points)
     {
-        // 将点云里的点插入到octomap中
+        // 포인트 클라우드의 점을 옥토맵에 삽입합니다.
         tree.updateNode( octomap::point3d(p.x, p.y, p.z), true );
     }
 
-    // 设置颜色
+    // 색상 설정
     for (auto p:cloud.points)
     {
         tree.integrateNodeColor( p.x, p.y, p.z, p.r, p.g, p.b );
     }
 
-    // 更新octomap
+    // 옥토맵 업데이트
     tree.updateInnerOccupancy();
-    // 存储octomap, 注意要存成.ot文件而非.bt文件
+    // 옥토맵 저장, .bt 파일이 아닌 .ot 파일로 저장해야 합니다.
     tree.write( output_file );
     cout<<"done."<<endl;
 
