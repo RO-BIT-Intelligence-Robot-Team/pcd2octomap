@@ -45,5 +45,3 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/app)
 
 add_executable(filter_z src/filter_z.cpp)
 target_link_libraries(filter_z ${catkin_LIBRARIES})
-add_executable(pcd_divider_node src/pcd_divider_node.cpp)
-target_link_libraries(pcd_divider_node ${catkin_LIBRARIES})
