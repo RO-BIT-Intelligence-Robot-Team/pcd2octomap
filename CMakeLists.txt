@@ -18,6 +18,16 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
 )
 
+## Find PCL
+find_package(PCL REQUIRED COMPONENTS common io)
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
+## Find OctoMap
+find_package(octomap REQUIRED)
+include_directories(${OCTOMAP_INCLUDE_DIRS})
+
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES cvt_pcd2octomap
@@ -41,7 +51,11 @@ include_directories(
 #   src/${PROJECT_NAME}/cvt_pcd2octomap.cpp
 # )
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/app)
-
 add_executable(filter_z src/filter_z.cpp)
 target_link_libraries(filter_z ${catkin_LIBRARIES})
+
+add_executable(pcd2octomap src/pcd2octomap.cpp)
+target_link_libraries(pcd2octomap ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${OCTOMAP_LIBRARIES})
+
+add_executable(pcd2colorOctomap src/pcd2colorOctomap.cpp)
+target_link_libraries(pcd2colorOctomap ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${OCTOMAP_LIBRARIES})
