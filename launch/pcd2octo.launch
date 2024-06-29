@@ -5,6 +5,7 @@
     <arg name="rviz" default="true" />
     <arg name="filter_limit_min" default="0.2" />
     <arg name="filter_limit_max" default="1.5" />
+    <arg name="octomap_file" default="/home/$(arg user)/catkin_ws/maps/map_3d.ot"/>
 
     <node pkg="pcl_ros" type="pcd_to_pointcloud" name="spawn_pcd_to_pcl" output="screen" args="$(arg pcd_file) 0.1">
         <param name="frame_id" value="map" />
@@ -23,6 +24,10 @@
     </node>
 
     <node pkg="map_server" type="map_saver" name="map_saver" args="-f /home/$(arg user)/catkin_ws/maps/map_2d" output="screen"/>
+
+    <node name="octomap_server" pkg="octomap_server" type="octomap_server_node" output="screen">
+        <param name="~filename" value="$(arg octomap_file)"/>
+    </node>
 
     <group if="$(arg rviz)">
         <node pkg="rviz" type="rviz" name="cvt_pcd_rviz" args="-d $(find cvt_pcd2octomap)/rviz/pcd2octo.rviz" />

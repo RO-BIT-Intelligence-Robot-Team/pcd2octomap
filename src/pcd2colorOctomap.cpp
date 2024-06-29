@@ -34,15 +34,17 @@ using namespace std;
 int main(int argc, char** argv)
 {
     ros::init(argc, argv, "pcd2colorOctomap");
-    ros::NodeHandle nh;
+    ros::NodeHandle nh("~");
 
-    if (argc != 3)
+    string input_file, output_file;
+
+    // Get parameters from the parameter server
+    if (!nh.getParam("input_file", input_file) || !nh.getParam("output_file", output_file))
     {
-        ROS_ERROR("Usage: rosrun your_package_name pcd2colorOctomap <input_file> <output_file>");
+        ROS_ERROR("Failed to get input_file and/or output_file parameters");
         return -1;
     }
 
-    string input_file = argv[1], output_file = argv[2];
     pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGBA>);
     if (pcl::io::loadPCDFile<pcl::PointXYZRGBA>(input_file, *cloud) == -1)
     {

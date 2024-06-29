@@ -1,0 +1,12 @@
+<launch>
+    <arg name="user" default="$(env USER)" />
+    <!-- Input and output file parameters -->
+    <arg name="input_file" default="/home/$(arg user)/catkin_ws/pcd/map_filtered.pcd"/>
+    <arg name="output_file" default="/home/$(arg user)/catkin_ws/maps/map_3d_color.ot"/>
+
+    <!-- Node execution with parameters -->
+    <node name="pcd2colorOctomap" pkg="cvt_pcd2octomap" type="pcd2colorOctomap" output="screen">
+        <param name="input_file" value="$(arg input_file)"/>
+        <param name="output_file" value="$(arg output_file)"/>
+    </node>
+</launch>
