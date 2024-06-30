@@ -5,16 +5,22 @@
 
 typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
 
+using namespace std;
+
 class PointCloudFilter {
 public:
     PointCloudFilter() {
+        // Get parameters from launch file or parameter server
+        ros::NodeHandle private_nh("~");
+        private_nh.param("filter_limit_min", filter_limit_min_, -0.6);
+        private_nh.param("filter_limit_max", filter_limit_max_, 1.0);
+
         // Initialize ROS node handle, subscriber, and publisher
         sub_ = nh_.subscribe("/cloud_in", 1, &PointCloudFilter::cloudCallback, this);
         pub_ = nh_.advertise<PointCloud>("/filtered_cloud", 1);
 
-        // Get parameters from launch file or parameter server
-        nh_.param("filter_limit_min", filter_limit_min_, 0.2);
-        nh_.param("filter_limit_max", filter_limit_max_, 1.5);
+        cout<<"min_z: "<<filter_limit_min_<<endl;
+        cout<<"max_z: "<<filter_limit_max_<<endl;
     }
 
     void cloudCallback(const PointCloud::ConstPtr& cloud) {
